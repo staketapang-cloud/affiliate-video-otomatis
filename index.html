@@ -1,0 +1,466 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071a2d">
+<title>Affiliate Studio AI</title>
+
+<style>
+:root {
+  --bg: #071a2d;
+  --panel: #102941;
+  --line: #25435c;
+  --blue: #168bff;
+  --orange: #ff8b35;
+  --text: #f4f8ff;
+  --muted: #a9bdd0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(ellipse at top right, #123b5c, transparent 48%),
+    var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
+
+header {
+  padding: 20px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.logo span { color: var(--orange); }
+
+.status {
+  font-size: 12px;
+  color: #8fe3bb;
+  border: 1px solid #286d56;
+  padding: 8px 11px;
+  border-radius: 20px;
+}
+
+main {
+  max-width: 1050px;
+  margin: auto;
+  padding: 30px 16px 60px;
+}
+
+.hero { margin-bottom: 25px; }
+
+.eyebrow {
+  color: var(--orange);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+h1 {
+  font-size: clamp(30px, 5vw, 48px);
+  line-height: 1.12;
+  margin: 12px 0;
+}
+
+h1 span {
+  color: var(--orange);
+}
+
+p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 20px;
+}
+
+.panel {
+  background: rgba(16,41,65,.94);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 22px;
+  min-width: 0;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 19px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 18px 0 8px;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #081d31;
+  color: white;
+  font: inherit;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid var(--blue);
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 11px;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.primary {
+  width: 100%;
+  margin-top: 22px;
+  color: white;
+  background: linear-gradient(100deg, #0878ef, #ff8536);
+}
+
+.secondary {
+  background: #193b56;
+  color: white;
+  border: 1px solid var(--line);
+}
+
+.hint {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.preview {
+  min-height: 330px;
+  border: 1px dashed #41627e;
+  border-radius: 15px;
+  background: #081d31;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.preview img {
+  max-width: 100%;
+  max-height: 350px;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.preview .symbol {
+  font-size: 48px;
+}
+
+.preview-name {
+  color: white;
+  font-weight: bold;
+  margin-top: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.actions button { flex: 1; }
+
+#message {
+  white-space: pre-wrap;
+  font-size: 13px;
+  color: #a9e7c9;
+  line-height: 1.6;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 25px;
+  font-size: 12px;
+}
+
+@media (max-width: 720px) {
+  header { padding: 16px; }
+  .logo { font-size: 17px; }
+  main { padding: 25px 12px 40px; }
+  .layout { grid-template-columns: 1fr; }
+  .panel { padding: 18px; }
+  .preview { min-height: 240px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">AFFILIATE<span>STUDIO</span> AI</div>
+  <div class="status">● MODE DEMO</div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">AI VIDEO CREATOR • 2026</div>
+    <h1>Produk jadi video.<br><span>Siap promosi.</span></h1>
+    <p>
+      Buat konsep video affiliate vertikal dengan foto produk,
+      naskah promosi, dan persiapan suara wanita Indonesia.
+    </p>
+  </section>
+
+  <div class="layout">
+
+    <section class="panel">
+      <h2>01 / Data Produk</h2>
+
+      <form id="productForm">
+
+        <label for="productUrl">Tautan produk affiliate</label>
+        <input id="productUrl" type="url"
+          placeholder="https://..." autocomplete="url">
+
+        <p class="hint">
+          Tautan disimpan di formulir ini. Versi awal belum
+          mengambil data marketplace secara otomatis.
+        </p>
+
+        <label for="productName">Nama produk</label>
+        <input id="productName" required
+          placeholder="Contoh: Botol minum 1 liter">
+
+        <label for="productPrice">Harga produk (opsional)</label>
+        <input id="productPrice"
+          placeholder="Contoh: Rp49.000">
+
+        <label for="productBenefits">Keunggulan produk</label>
+        <textarea id="productBenefits" required
+          placeholder="Contoh: ringan, praktis, mudah dibawa"></textarea>
+
+        <label for="productImage">Foto produk</label>
+        <input id="productImage" type="file"
+          accept="image/jpeg,image/png,image/webp" required>
+
+        <label for="voice">Suara narasi</label>
+        <select id="voice">
+          <option value="female-id">Wanita Indonesia</option>
+        </select>
+
+        <label for="duration">Durasi target video</label>
+        <select id="duration">
+          <option value="15">15 detik</option>
+          <option value="30" selected>30 detik</option>
+        </select>
+
+        <button class="primary" type="submit">
+          ✦ BUAT KONSEP VIDEO
+        </button>
+      </form>
+
+      <p class="hint">
+        Tahap ini membuat konsep dan pratinjau. Suara AI serta
+        ekspor MP4 belum aktif.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>02 / Studio Preview</h2>
+
+      <div class="preview" id="preview">
+        <div class="symbol">▶</div>
+        <div class="preview-name">Video kamu akan tampil di sini</div>
+        <p>Format vertikal • 9:16 • TikTok</p>
+      </div>
+
+      <label for="script">Naskah promosi</label>
+      <textarea id="script"
+        placeholder="Naskah promosi akan muncul di sini..."></textarea>
+
+      <div class="actions">
+        <button class="secondary" id="copyScript" type="button">
+          Salin Naskah
+        </button>
+        <button class="secondary" id="reset" type="button">
+          Reset
+        </button>
+      </div>
+
+      <p id="message" role="status" aria-live="polite"></p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  AFFILIATE STUDIO AI • Personal Video Creator
+</footer>
+
+<script>
+const form = document.getElementById("productForm");
+const imageInput = document.getElementById("productImage");
+const preview = document.getElementById("preview");
+const scriptBox = document.getElementById("script");
+const message = document.getElementById("message");
+
+let currentImageUrl = "";
+
+imageInput.addEventListener("change", function () {
+  const file = this.files[0];
+
+  if (currentImageUrl) {
+    URL.revokeObjectURL(currentImageUrl);
+    currentImageUrl = "";
+  }
+
+  if (!file) return;
+
+  if (file.size > 10 * 1024 * 1024) {
+    this.value = "";
+    message.textContent =
+      "Foto terlalu besar. Gunakan foto maksimal 10 MB.";
+    return;
+  }
+
+  currentImageUrl = URL.createObjectURL(file);
+
+  preview.replaceChildren();
+
+  const img = document.createElement("img");
+  img.src = currentImageUrl;
+  img.alt = "Pratinjau foto produk";
+
+  preview.appendChild(img);
+});
+
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  const name =
+    document.getElementById("productName").value.trim();
+
+  const price =
+    document.getElementById("productPrice").value.trim();
+
+  const benefits =
+    document.getElementById("productBenefits").value.trim();
+
+  const duration =
+    Number(document.getElementById("duration").value);
+
+  if (!imageInput.files.length) {
+    message.textContent = "Pilih foto produk terlebih dahulu.";
+    return;
+  }
+
+  const opening =
+    "Lagi cari produk yang praktis? Yuk, kenalan dengan " +
+    name + ".";
+
+  const priceText = price
+    ? " Harganya " + price + "."
+    : "";
+
+  const ending =
+    " Cek detail produknya melalui tautan affiliate.";
+
+  scriptBox.value =
+    opening + " " +
+    "Keunggulannya, " + benefits + "." +
+    priceText + ending;
+
+  preview.querySelector(".preview-name")?.remove();
+
+  const caption = document.createElement("div");
+  caption.className = "preview-name";
+  caption.textContent = name;
+
+  preview.appendChild(caption);
+
+  message.textContent =
+    "Konsep berhasil dibuat untuk target " + duration +
+    " detik. Naskah ini masih perlu diperiksa dan mungkin " +
+    "dipersingkat sebelum dibuat menjadi suara dan video.";
+
+  preview.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+});
+
+document.getElementById("copyScript")
+  .addEventListener("click", async function () {
+    if (!scriptBox.value.trim()) {
+      message.textContent = "Belum ada naskah untuk disalin.";
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(scriptBox.value);
+      message.textContent = "Naskah berhasil disalin.";
+    } catch (error) {
+      scriptBox.focus();
+      scriptBox.select();
+      message.textContent =
+        "Pilih teks naskah lalu salin secara manual.";
+    }
+  });
+
+document.getElementById("reset")
+  .addEventListener("click", function () {
+    form.reset();
+    scriptBox.value = "";
+    preview.replaceChildren();
+
+    const symbol = document.createElement("div");
+    symbol.className = "symbol";
+    symbol.textContent = "▶";
+
+    const title = document.createElement("div");
+    title.className = "preview-name";
+    title.textContent = "Video kamu akan tampil di sini";
+
+    const info = document.createElement("p");
+    info.textContent = "Format vertikal • 9:16 • TikTok";
+
+    preview.append(symbol, title, info);
+
+    if (currentImageUrl) {
+      URL.revokeObjectURL(currentImageUrl);
+      currentImageUrl = "";
+    }
+
+    message.textContent = "";
+  });
+</script>
+
+</body>
+</html>
