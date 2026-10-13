@@ -319,6 +319,10 @@ footer {
     ■ Hentikan
   </button>
 
+<button class="secondary" id="makeVideo" type="button">
+  🎬 BUAT VIDEO
+</button>
+
   <button class="secondary" id="reset" type="button">
     Reset
   </button>
@@ -516,6 +520,184 @@ document.getElementById("stopVoice")
     }
   });
 
+/* =========================================
+   PEMBUAT VIDEO PRODUK
+========================================= */
+
+document.getElementById("makeVideo")
+  .addEventListener("click", async function () {
+
+    const file = imageInput.files[0];
+    const nama =
+      document.getElementById("productName").value.trim();
+    const manfaat =
+      document.getElementById("productBenefits").value.trim();
+    const durasi =
+      Number(document.getElementById("duration").value);
+
+    if (!file || !nama || !manfaat) {
+      message.textContent =
+        "Isi nama produk, keunggulan, dan pilih foto dahulu.";
+      return;
+    }
+
+    const tombol = this;
+    tombol.disabled = true;
+    message.textContent = "Sedang membuat video...";
+
+    let stream = null;
+    let urlFoto = null;
+    let urlVideo = null;
+
+    try {
+      const gambar = new Image();
+      urlFoto = URL.createObjectURL(file);
+      gambar.src = urlFoto;
+
+      await new Promise((resolve, reject) => {
+        gambar.onload = resolve;
+        gambar.onerror = reject;
+      });
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 720;
+      canvas.height = 1280;
+
+      const ctx = canvas.getContext("2d");
+
+      function gambarFrame() {
+        ctx.fillStyle = "#071a2d";
+        ctx.fillRect(0, 0, 720, 1280);
+
+        const skala = Math.min(
+          640 / gambar.width,
+          760 / gambar.height
+        );
+
+        const lebar = gambar.width * skala;
+        const tinggi = gambar.height * skala;
+
+        ctx.drawImage(
+          gambar,
+          (720 - lebar) / 2,
+          90 + (760 - tinggi) / 2,
+          lebar,
+          tinggi
+        );
+
+        ctx.fillStyle = "#ff8b35";
+        ctx.font = "bold 26px Arial";
+        ctx.fillText("REKOMENDASI PRODUK", 35, 930);
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 38px Arial";
+
+        const judul = nama.length > 32
+          ? nama.substring(0, 29) + "..."
+          : nama;
+
+        ctx.fillText(judul, 35, 990);
+
+        ctx.fillStyle = "#d6e5f2";
+        ctx.font = "24px Arial";
+
+        const teks = manfaat.length > 75
+          ? manfaat.substring(0, 72) + "..."
+          : manfaat;
+
+        ctx.fillText(teks, 35, 1050);
+
+        ctx.fillStyle = "#f58220";
+        ctx.fillRect(35, 1100, 650, 5);
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 24px Arial";
+        ctx.fillText("CEK PRODUK SEKARANG", 35, 1160);
+      }
+
+      gambarFrame();
+
+      stream = canvas.captureStream(24);
+
+      const tipe = [
+        "video/webm;codecs=vp9",
+        "video/webm;codecs=vp8",
+        "video/webm"
+      ].find(function (jenis) {
+        return MediaRecorder.isTypeSupported(jenis);
+      });
+
+      if (!tipe) {
+        throw new Error("Browser tidak mendukung format video.");
+      }
+
+      const perekam = new MediaRecorder(
+        stream,
+        { mimeType: tipe }
+      );
+
+      const potongan = [];
+
+      perekam.ondataavailable = function (event) {
+        if (event.data.size > 0) {
+          potongan.push(event.data);
+        }
+      };
+
+      const selesai = new Promise((resolve, reject) => {
+        perekam.onstop = resolve;
+        perekam.onerror = () =>
+          reject(new Error("Perekaman video gagal."));
+      });
+
+      perekam.start();
+
+      await new Promise(resolve => {
+        setTimeout(resolve, durasi * 1000);
+      });
+
+      perekam.stop();
+      await selesai;
+
+      const hasil = new Blob(potongan, {
+        type: "video/webm"
+      });
+
+      urlVideo = URL.createObjectURL(hasil);
+
+      const unduh = document.createElement("a");
+      unduh.href = urlVideo;
+      unduh.download = "affiliate-video.webm";
+      document.body.appendChild(unduh);
+      unduh.click();
+      unduh.remove();
+
+      message.textContent =
+        "Video berhasil diunduh! Format WebM tanpa suara.";
+
+    } catch (error) {
+      message.textContent =
+        "Gagal membuat video: " + error.message;
+
+    } finally {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+
+      if (urlFoto) URL.revokeObjectURL(urlFoto);
+
+      if (urlVideo) {
+        setTimeout(() => URL.revokeObjectURL(urlVideo), 60000);
+      }
+
+      tombol.disabled = false;
+    }
+  });
+
+/* =========================================
+   BATAS AKHIR KODE VIDEO
+========================================= */
+  
 document.getElementById("reset")
   .addEventListener("click", function () {
     form.reset();
