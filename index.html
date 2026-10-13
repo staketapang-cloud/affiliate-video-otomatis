@@ -305,14 +305,25 @@ footer {
       <textarea id="script"
         placeholder="Naskah promosi akan muncul di sini..."></textarea>
 
-      <div class="actions">
-        <button class="secondary" id="copyScript" type="button">
-          Salin Naskah
-        </button>
-        <button class="secondary" id="reset" type="button">
-          Reset
-        </button>
-      </div>
+     
+<div class="actions">
+  <button class="secondary" id="copyScript" type="button">
+    Salin Naskah
+  </button>
+
+  <button class="secondary" id="playVoice" type="button">
+    🔊 Dengarkan Suara
+  </button>
+
+  <button class="secondary" id="stopVoice" type="button">
+    ■ Hentikan
+  </button>
+
+  <button class="secondary" id="reset" type="button">
+    Reset
+  </button>
+</div>
+
 
       <p id="message" role="status" aria-live="polite"></p>
     </section>
@@ -431,6 +442,77 @@ document.getElementById("copyScript")
       scriptBox.select();
       message.textContent =
         "Pilih teks naskah lalu salin secara manual.";
+    }
+  });
+
+/* =========================================
+   SUARA NARASI BROWSER
+========================================= */
+
+document.getElementById("playVoice")
+  .addEventListener("click", function () {
+
+    const teks = scriptBox.value.trim();
+
+    if (!teks) {
+      message.textContent =
+        "Buat naskah promosi terlebih dahulu.";
+      return;
+    }
+
+    if (!("speechSynthesis" in window)) {
+      message.textContent =
+        "Browser ini belum mendukung fitur suara.";
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const narasi = new SpeechSynthesisUtterance(teks);
+
+    narasi.lang = "id-ID";
+    narasi.rate = 0.92;
+    narasi.pitch = 1.08;
+
+    const daftarSuara =
+      window.speechSynthesis.getVoices();
+
+    const suaraIndonesia = daftarSuara.find(function (suara) {
+      return suara.lang.toLowerCase().startsWith("id");
+    });
+
+    if (suaraIndonesia) {
+      narasi.voice = suaraIndonesia;
+
+      message.textContent =
+        "Memutar suara bahasa Indonesia: " +
+        suaraIndonesia.name;
+    } else {
+      message.textContent =
+        "Suara Indonesia belum ditemukan. " +
+        "Coba periksa suara bahasa di perangkat.";
+    }
+
+    narasi.onend = function () {
+      message.textContent += "\nNarasi selesai diputar.";
+    };
+
+    narasi.onerror = function () {
+      message.textContent =
+        "Suara gagal diputar. Coba muat ulang halaman.";
+    };
+
+    window.speechSynthesis.speak(narasi);
+  });
+
+
+document.getElementById("stopVoice")
+  .addEventListener("click", function () {
+
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+
+      message.textContent = "Pemutaran suara dihentikan.";
     }
   });
 
